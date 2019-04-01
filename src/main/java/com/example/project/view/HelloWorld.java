@@ -1,26 +1,39 @@
 package com.example.project.view;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+
+import com.example.project.model.Message;
+import com.example.project.service.MessageService;
 
 @Named @RequestScoped
 public class HelloWorld {
-	private String input;
-	private String output;
+	private Message message = new Message();
+	private List<Message> messages;
+	
+	@Inject
+	private MessageService messageService;
+	
+	@PostConstruct
+	public void init() {
+		messages = messageService.list();
+	}
 	
 	public void submit() {
-		output = "Hello world! You just typed: " + input;
+		messageService.create(message);
+		messages.add(message);
 	}
 	
-	public String getInput() {
-		return input;
+	public Message getMessage() {
+		return message;
 	}
 	
-	public void setInput(String input) {
-		this.input = input;
+	public List<Message> getMessages() {
+		return messages;
 	}
-	
-	public String getOutput() {
-		return output;
-	}
+
 }
